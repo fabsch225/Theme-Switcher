@@ -41,7 +41,7 @@ def get_current_theme():
         print(f"Error accessing the registry: {e}")
         return "unknown"
 
-def capture_multiple_screenshots(num_screenshots=10, interval=1):
+def capture_multiple_screenshots(num_screenshots=120, interval=1):
     """Capture multiple screenshots and calculate average brightness."""
     total_brightness = 0
     valid_captures = 0
@@ -74,7 +74,7 @@ def capture_multiple_screenshots(num_screenshots=10, interval=1):
 
     if valid_captures == 0:
         print("No valid captures were made.")
-        return
+        return 0
 
     average_brightness = total_brightness / valid_captures
     print(f"Average brightness from {valid_captures} captures: {average_brightness}")
