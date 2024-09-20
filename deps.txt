@@ -1,3 +1,2 @@
-schedule
 opencv-python
 numpy

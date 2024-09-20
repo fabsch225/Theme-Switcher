@@ -13,7 +13,6 @@ This Python Script Detects the lighting from your webcam, and sets the OS-Theme 
     ```sh
     pip install opencv-python
     pip install numpy
-    pip install schedule
     ```
 3. Navigate to the project directory:
     ```sh

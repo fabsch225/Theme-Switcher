@@ -1,6 +1,8 @@
 import cv2
 import ctypes
 import numpy as np
+import time
+import winreg
 import subprocess
 import threading
 
@@ -13,8 +15,8 @@ def broadcast_theme_change():
     WM_PAINT = 0x000F
 
     ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0, 'ImmersiveColorSet', 0, 5000, None)
-    ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_THEMECHANGED, 0, 0, 0, 5000, None)
-    ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_STYLECHANGED, 0, 0, 0, 5000, None)
+    #ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_THEMECHANGED, 0, 0, 0, 5000, None)
+    #ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_STYLECHANGED, 0, 0, 0, 5000, None)
     #ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_NCPAINT, 0, 0, 0, 5000, None)
     #ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_PAINT, 0, 0, 0, 5000, None)
 
@@ -39,20 +41,56 @@ def get_current_theme():
         print(f"Error accessing the registry: {e}")
         return "unknown"
 
-def detect_brightness_and_switch_theme():
+def capture_multiple_screenshots(num_screenshots=10, interval=1):
+    """Capture multiple screenshots and calculate average brightness."""
+    total_brightness = 0
+    valid_captures = 0
+
     cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
-    ret, frame = cam.read()
-    cam.release()
-
-    if not ret:
-        print("Failed to capture image from webcam.")
+    if not cam.isOpened():
+        print("Camera is not accessible. It may be in use by another application.")
         return
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    avg_brightness = np.mean(gray)
+    for _ in range(num_screenshots):
+        ret, frame = cam.read()
+        if not ret:
+            print("Failed to capture image from webcam. The frame may be black.")
+            continue
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        avg_brightness = np.mean(gray)
+
+        if avg_brightness == 0:
+            #print("Captured image is completely black. Skipping this capture.")
+            continue
+
+        total_brightness += avg_brightness
+        valid_captures += 1
+
+        time.sleep(interval)  # Wait for the specified interval
+
+    cam.release()
+
+    if valid_captures == 0:
+        print("No valid captures were made.")
+        return
+
+    average_brightness = total_brightness / valid_captures
+    print(f"Average brightness from {valid_captures} captures: {average_brightness}")
+
+    return average_brightness
+
+def detect_brightness_and_switch_theme():
+    avg_brightness = capture_multiple_screenshots()
+
+    if avg_brightness == 0:
+        print("Failed to calculate average brightness. Maybe the camera is used by another application.")
+        return
+
     brightness_threshold = 100
-    new_theme = theme
+    current_theme = get_current_theme()
+    new_theme = ""
 
     if avg_brightness < brightness_threshold:
         subprocess.run([
@@ -71,7 +109,7 @@ def detect_brightness_and_switch_theme():
         print(f"Switched to Light Mode. Avg Brightness: {avg_brightness}")
         new_theme = "light"
 
-    if (new_theme != get_current_theme()):
+    if (new_theme != current_theme):
         thread = threading.Thread(target=broadcast_theme_change)
         thread.start()
         restart_explorer()
