@@ -55,7 +55,7 @@ def capture_multiple_screenshots(num_screenshots=10, interval=1):
     for _ in range(num_screenshots):
         ret, frame = cam.read()
         if not ret:
-            print("Failed to capture image from webcam. The frame may be black.")
+            #print("Failed to capture image from webcam")
             continue
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
