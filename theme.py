@@ -2,6 +2,7 @@ import cv2
 import ctypes
 import numpy as np
 import time
+import datetime
 import winreg
 import subprocess
 import threading
@@ -38,7 +39,7 @@ def get_current_theme():
             else:
                 return "unknown"
     except Exception as e:
-        print(f"Error accessing the registry: {e}")
+        log(f"Error accessing the registry: {e}")
         return "unknown"
 
 def capture_multiple_screenshots(num_screenshots=120, interval=1):
@@ -49,7 +50,7 @@ def capture_multiple_screenshots(num_screenshots=120, interval=1):
     cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
     if not cam.isOpened():
-        print("Camera is not accessible. It may be in use by another application.")
+        log("Camera is not accessible. It may be in use by another application.")
         return
 
     for _ in range(num_screenshots):
@@ -77,7 +78,7 @@ def capture_multiple_screenshots(num_screenshots=120, interval=1):
         return 0
 
     average_brightness = total_brightness / valid_captures
-    print(f"Average brightness from {valid_captures} captures: {average_brightness}")
+    log(f"Average brightness from {valid_captures} captures: {average_brightness}")
 
     return average_brightness
 
@@ -85,10 +86,10 @@ def detect_brightness_and_switch_theme():
     avg_brightness = capture_multiple_screenshots()
 
     if avg_brightness == 0:
-        print("Failed to calculate average brightness. Maybe the camera is used by another application.")
+        log("Failed to calculate average brightness. Maybe the camera is used by another application.")
         return
 
-    brightness_threshold = 100
+    brightness_threshold = 85
     current_theme = get_current_theme()
     new_theme = ""
 
@@ -98,7 +99,7 @@ def detect_brightness_and_switch_theme():
             "Set-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize -Name AppsUseLightTheme -Value 0;"
             "Set-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize -Name SystemUsesLightTheme -Value 0"
         ])
-        print(f"Switched to Dark Mode. Avg Brightness: {avg_brightness}")
+        log(f"Switched to Dark Mode.")
         new_theme = "dark"
     else:
         subprocess.run([
@@ -106,13 +107,16 @@ def detect_brightness_and_switch_theme():
             "Set-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize -Name AppsUseLightTheme -Value 1;"
             "Set-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize -Name SystemUsesLightTheme -Value 1"
         ])
-        print(f"Switched to Light Mode. Avg Brightness: {avg_brightness}")
+        log(f"Switched to Light Mode.")
         new_theme = "light"
 
     if (new_theme != current_theme):
         thread = threading.Thread(target=broadcast_theme_change)
         thread.start()
         restart_explorer()
+
+def log(message):
+    print(f"[{datetime.datetime.now()}] {message}")
 
 if __name__ == "__main__":
     detect_brightness_and_switch_theme()
