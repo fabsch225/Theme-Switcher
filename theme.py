@@ -51,7 +51,7 @@ def capture_multiple_screenshots(num_screenshots=120, interval=1):
 
     if not cam.isOpened():
         log("Camera is not accessible. It may be in use by another application.")
-        return
+        return 0
 
     for _ in range(num_screenshots):
         ret, frame = cam.read()
@@ -86,7 +86,7 @@ def detect_brightness_and_switch_theme():
     avg_brightness = capture_multiple_screenshots()
 
     if avg_brightness == 0:
-        log("Failed to calculate average brightness. Maybe the camera is used by another application.")
+        print("Failed to calculate average brightness. Maybe the camera is used by another application.")
         return
 
     brightness_threshold = 85
