@@ -1,7 +1,9 @@
 # Theme Switcher
 
-This Python script detects the lighting from your webcam and sets the OS theme accordingly. This only works on Windows.
-
+This Python script detects the lighting from your webcam and sets the OS theme accordingly. 
+You can run main.py *once* to test the functionality of the automatic switcher. 
+If you run scheduler.py, the theme switcher logic gets triggered every 10 minutes.
+This is tested on Windows 11 and Linux Mint Cinnamon.
 
 ## Installation
 
@@ -35,6 +37,7 @@ This Python script detects the lighting from your webcam and sets the OS theme a
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request.
+For example, one could add support for macOS or ones favourite Linux Distro / Desktop Environment
 
 ## License
 

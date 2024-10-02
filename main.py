@@ -7,6 +7,7 @@ import platform_decider
 def capture_multiple_screenshots(os_id, num_screenshots=60, interval=1):
     total_brightness = 0
     valid_captures = 0
+    # CAP_DSHOW is a windows-thing
     video_flag = cv2.CAP_DSHOW
     if "linux" in os_id:
         video_flag = cv2.CAP_V4L2
