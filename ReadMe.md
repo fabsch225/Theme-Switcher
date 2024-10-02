@@ -13,11 +13,19 @@ This Python script detects the lighting from your webcam and sets the OS theme a
     ```sh
     pip install opencv-python
     pip install numpy
+   # on windows
+   pip install winreg
+   # on linux
+   pip install distro
     ```
 3. Navigate to the project directory:
     ```sh
     cd theme-switcher
     ```
+   1. On Linux: install bindings for opencv-python
+      ```shell
+      sudo apt-get install python3-opencv
+      ```
 4. Run
     ```sh
     python3 ./scheduler.py
