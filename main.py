@@ -91,9 +91,6 @@ def log(message):
         log_file.write(log_message + "\n")
 
 
-# Example usage
-log("This is a test log message.")
-
 if __name__ == "__main__":
     os_id = platform_decider.get_os_id()
     log(f"Found {os_id} Environment")
