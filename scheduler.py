@@ -8,4 +8,4 @@ if __name__ == "__main__":
     log(f"Found {os_id} Environment")
     while True:
         detect_brightness_and_switch_theme(os_id)
-        time.sleep(600)  
+        time.sleep(600)

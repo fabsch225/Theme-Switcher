@@ -70,9 +70,7 @@ def detect_brightness_and_switch_theme(os_id):
 
 def get_time_based_threshold():
     current_hour = datetime.datetime.now().hour
-
     log(f"Current hour is {current_hour}. The brightness threshold will be adjusted")
-
     if 6 <= current_hour < 12:  # Morning (6 AM to 12 PM)
         return 90
     elif 12 <= current_hour < 18:  # Afternoon (12 PM to 6 PM)
@@ -82,8 +80,19 @@ def get_time_based_threshold():
     else:  # Night (9 PM to 6 AM)
         return 105
 
+
 def log(message):
-    print(f"[{datetime.datetime.now()}] {message}")
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    log_message = f"[{current_time}] {message}"
+    print(log_message)
+    log_filename = f"log_{current_date}.txt"
+    with open(log_filename, "a") as log_file:
+        log_file.write(log_message + "\n")
+
+
+# Example usage
+log("This is a test log message.")
 
 if __name__ == "__main__":
     os_id = platform_decider.get_os_id()

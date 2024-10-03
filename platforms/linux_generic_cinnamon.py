@@ -7,6 +7,7 @@ gsettings set org.cinnamon.desktop.wm.preferences theme Mint-Y-Dark-Blue
 gsettings set org.cinnamon.desktop.interface gtk-theme Mint-Y-Dark-Blue
 gsettings set org.cinnamon.theme name Mint-Y-Dark-Blue
 gsettings set org.x.apps.portal color-scheme 'prefer-dark'
+
 --- light ---
 
 gsettings set org.cinnamon.desktop.wm.preferences theme Mint-L-Blue
