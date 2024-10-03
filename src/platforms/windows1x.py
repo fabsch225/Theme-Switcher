@@ -1,7 +1,7 @@
 import winreg
 import ctypes
 import subprocess
-from main import log
+from src.main import log
 import threading
 
 def change_mode(mode):

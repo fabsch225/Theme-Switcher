@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 import time
 import datetime
 import platform_decider
@@ -86,8 +87,13 @@ def log(message):
     current_date = datetime.datetime.now().strftime("%Y-%m-%d")
     log_message = f"[{current_time}] {message}"
     print(log_message)
+    log_directory = "./logs"
     log_filename = f"log_{current_date}.txt"
-    with open(log_filename, "a") as log_file:
+
+    if not os.path.exists(log_directory):
+        os.makedirs(log_directory)
+    log_filepath = os.path.join(log_directory, log_filename)
+    with open(log_filepath, "a") as log_file:
         log_file.write(log_message + "\n")
 
 
