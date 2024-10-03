@@ -1,22 +1,24 @@
 import platform
 import os
 import subprocess
-from src import platforms
-
 
 def set_theme(os_id, mode):
     match os_id:
         case "windows":
-            platforms.windows1x.change_mode(mode)
+            import platforms.windows1x as windows1x
+            windows1x.change_mode(mode)
         case "linux_generic_cinnamon":
-            platforms.linux_generic_cinnamon.change_mode(mode)
+            import platforms.linux_generic_cinnamon as linux_generic_cinnamon
+            linux_generic_cinnamon.change_mode(mode)
 
 def get_theme(os_id):
     match os_id:
         case "windows":
-            platforms.windows1x.get_current_theme()
+            import platforms.windows1x as windows1x
+            windows1x.get_current_theme()
         case "linux_generic_cinnamon":
-            platforms.linux_generic_cinnamon.get_current_theme()
+            import platforms.linux_generic_cinnamon as linux_generic_cinnamon
+            linux_generic_cinnamon.get_current_theme()
 
 def get_os_id():
     os_name = detect_os()
