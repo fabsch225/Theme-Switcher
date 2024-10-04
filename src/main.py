@@ -5,7 +5,7 @@ import time
 import datetime
 import platform_decider
 
-def capture_multiple_screenshots(os_id, num_screenshots=2, interval=1):
+def capture_multiple_screenshots(os_id, num_screenshots=10, interval=1):
     total_brightness = 0
     valid_captures = 0
     # CAP_DSHOW is a windows-thing

@@ -20,6 +20,8 @@ def change_mode(mode):
     dark = "Mint-Y-Dark-Blue"
     light = "Mint-L-Blue"
 
+    set_terminal_colors(mode)
+
     if mode == "dark":
         subprocess.run(["gsettings", "set", "org.cinnamon.desktop.wm.preferences", "theme", dark])
         subprocess.run(["gsettings", "set", "org.cinnamon.desktop.interface", "gtk-theme", dark])
@@ -35,6 +37,31 @@ def change_mode(mode):
 
 def get_current_theme():
     return "unknown"
+
+
+def set_terminal_colors(mode):
+    # Theme: Tango light / dark
+    light_bg = "'#EEEEEC'"
+    light_txt = "'#2E3436'"
+    dark_bg = "'#2E3436'"
+    dark_txt = "'#D3D7CF'"
+
+    # The Profile ID may wary
+    # Leftclick in the Terminal > Preferences > Profiles > Text ---> Look at the botton right corner
+    default_profile = "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
+
+    if mode == "dark":
+        background_color = dark_bg
+        foreground_color = dark_txt
+    elif mode == "light":
+        background_color = light_bg
+        foreground_color = light_txt
+    else:
+        raise ValueError("there can only be dark or light mode")
+
+    subprocess.run(["gsettings", "set", default_profile, "background-color", background_color], check=True)
+    subprocess.run(["gsettings", "set", default_profile, "foreground-color", foreground_color], check=True)
+
 
 if __name__ == "__main__":
     import sys
