@@ -46,7 +46,7 @@ def set_terminal_colors(mode):
     dark_bg = "'#2E3436'"
     dark_txt = "'#D3D7CF'"
 
-    # The Profile ID may wary
+    # The Profile ID may vary
     # Leftclick in the Terminal > Preferences > Profiles > Text ---> Look at the botton right corner
     default_profile = "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
 
@@ -59,8 +59,8 @@ def set_terminal_colors(mode):
     else:
         raise ValueError("there can only be dark or light mode")
 
-    subprocess.run(["gsettings", "set", default_profile, "background-color", background_color], check=True)
-    subprocess.run(["gsettings", "set", default_profile, "foreground-color", foreground_color], check=True)
+    subprocess.run(["dconf", "write", default_profile + "/background-color", background_color], check=True)
+    subprocess.run(["dconf", "write", default_profile + "/foreground-color", foreground_color], check=True)
 
 
 if __name__ == "__main__":
