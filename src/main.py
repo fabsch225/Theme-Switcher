@@ -59,11 +59,11 @@ def detect_brightness_and_switch_theme(os_id):
     current_theme = platform_decider.get_theme(os_id)
     new_theme = ""
     if avg_brightness < brightness_threshold:
-        log(f"Switching to Dark Mode.")
+        log(f"Switching to Dark Mode. Threshold was {brightness_threshold}")
         new_theme = "dark"
     else:
 
-        log(f"Switching to Light Mode.")
+        log(f"Switching to Light Mode. Threshold was {brightness_threshold}")
         new_theme = "light"
 
     if new_theme != current_theme:
